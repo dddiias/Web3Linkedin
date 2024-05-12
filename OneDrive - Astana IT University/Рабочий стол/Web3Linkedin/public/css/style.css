@@ -1,0 +1,45 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    color: #0f0;
+    /* Цвет текста */
+    font-family: 'Courier New', Courier, monospace;
+    /* Шрифт в хакерском стиле */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+#video-background {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   z-index: -1;
+   opacity: 0.2; /* Прозрачность видео */
+}
+
+button {
+    background-color: #0f0;
+    /* Цвет кнопки */
+    color: #000;
+    /* Цвет текста на кнопке */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #00ff00;
+    /* Цвет кнопки при наведении */
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect Wallet</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <h1>Connect Wallet</h1>
+    <button onclick="connectWallet()">Connect Wallet</button>
+
+    <video id="video-background" autoplay loop muted>
+        <source src="src/matrix_code.mp4" type="video/mp4"> <!-- Укажите путь к вашему видеофайлу -->
+        <!-- Добавьте поддержку для других форматов видео, если это необходимо -->
+    </video>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script>
+        async function connectWallet() {
+            if (window.ethereum) {
+                try {
+                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    // Выводим адрес кошелька в консоль
+                    console.log("Wallet connected! Address:", accounts[0]);
+                } catch (error) {
+                    console.error(error);
+                }
+            } else {
+                console.error("No Ethereum provider detected");
+            }
+        }
+    </script>
+</body>
+
+</html>

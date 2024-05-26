@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <!-- <link rel="stylesheet" href="/css/styles.css"> -->
+</head>
+
+<body>
+    <h1>Profile of <%= username %>
+    </h1>
+    <p><a href="/main">Back to Main</a> | <a href="/logout">Logout</a></p>
+    <% if (profilePicture) { %>
+        <img src="<%= profilePicture %>" alt="Profile Picture">
+        <% } %>
+            <p>Name: <%= name %>
+            </p>
+            <p>Bio: <%= bio %>
+            </p>
+            <p>Address: <%= address %>
+            </p>
+            <p>Number of Friends: <%= friendCount %>
+            </p>
+
+            <h2>Friends</h2>
+            <ul>
+                <% connections.forEach(friend=> { %>
+                    <li>
+                        <%= friend.username %> - <a href="/profile/<%= friend._id %>">View Profile</a>
+                    </li>
+                    <% }); %>
+            </ul>
+
+            <h2>Posts</h2>
+            <% if (posts.length> 0) { %>
+                <ul>
+                    <% posts.forEach(post=> { %>
+                        <li>
+                            <p>
+                                <%= post.content %>
+                            </p>
+                            <ul>
+                                <% post.comments.forEach(comment=> { %>
+                                    <li>
+                                        <%= comment.content %> by <%= comment.author.username %>
+                                    </li>
+                                    <% }); %>
+                            </ul>
+                        </li>
+                        <% }); %>
+                </ul>
+                <% } else { %>
+                    <p>No posts yet</p>
+                    <% } %>
+</body>
+
+</html>

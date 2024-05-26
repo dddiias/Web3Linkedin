@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect Wallet</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <h1>Connect Wallet</h1>
+    <button id="connectWallet">Connect Wallet</button>
+
+    <video id="video-background" autoplay loop muted>
+        <source src="src/matrix_code.mp4" type="video/mp4">
+    </video>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script>
+        document.getElementById('connectWallet').addEventListener('click', async () => {
+            if (window.ethereum) {
+                try {
+                    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                    const walletAddress = accounts[0];
+                    const response = await fetch('/wallet-connect', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ walletAddress })
+                    });
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    }
+                } catch (error) {
+                    console.error('Error connecting wallet:', error);
+                }
+            } else {
+                alert('Please install MetaMask!');
+            }
+        });
+    </script>
+</body>
+
+</html>

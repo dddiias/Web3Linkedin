@@ -17,57 +17,63 @@
     </p>
     <p><a href="/profile">Go to Profile</a> | <a href="/logout">Logout</a></p>
 
-    <% if (friendRequests.length> 0) { %>
-        <h2>Friend Requests</h2>
-        <ul>
-            <% friendRequests.forEach(request=> { %>
-                <li>
-                    <%= request.username %>
-                        <form action="/accept-friend" method="POST" style="display: inline;">
-                            <input type="hidden" name="requestId" value="<%= request._id %>">
-                            <button type="submit">Accept</button>
-                        </form>
-                        <form action="/decline-friend" method="POST" style="display: inline;">
-                            <input type="hidden" name="requestId" value="<%= request._id %>">
-                            <button type="submit">Decline</button>
-                        </form>
-                </li>
-                <% }); %>
-        </ul>
+    <% if (error) { %>
+        <p style="color: red;">
+            <%= error %>
+        </p>
         <% } %>
 
-            <h2>Posts</h2>
-            <form action="/posts/create" method="POST">
-                <textarea name="content" required></textarea>
-                <button type="submit">Post</button>
-            </form>
-            <ul>
-                <% posts.forEach(post=> { %>
-                    <li>
-                        <p>
-                            <%= post.content %> by <%= post.author.username %>
-                        </p>
-                        <ul>
-                            <% post.comments.forEach(comment=> { %>
-                                <li>
-                                    <%= comment.content %> by <%= comment.author.username %>
-                                </li>
-                                <% }); %>
-                        </ul>
-                        <form action="/posts/comment" method="POST">
-                            <input type="hidden" name="postId" value="<%= post._id %>">
-                            <textarea name="content" required></textarea>
-                            <button type="submit">Comment</button>
-                        </form>
-                    </li>
-                    <% }); %>
-            </ul>
+            <% if (friendRequests.length> 0) { %>
+                <h2>Friend Requests</h2>
+                <ul>
+                    <% friendRequests.forEach(request=> { %>
+                        <li>
+                            <%= request.username %>
+                                <form action="/accept-friend" method="POST" style="display: inline;">
+                                    <input type="hidden" name="requestId" value="<%= request._id %>">
+                                    <button type="submit">Accept</button>
+                                </form>
+                                <form action="/decline-friend" method="POST" style="display: inline;">
+                                    <input type="hidden" name="requestId" value="<%= request._id %>">
+                                    <button type="submit">Decline</button>
+                                </form>
+                        </li>
+                        <% }); %>
+                </ul>
+                <% } %>
 
-            <h2>Add a friend</h2>
-            <form action="/add-friend" method="POST">
-                <input type="text" name="friendId" placeholder="Friend ID" required>
-                <button type="submit">Add</button>
-            </form>
+                    <h2>Posts</h2>
+                    <form action="/posts/create" method="POST">
+                        <textarea name="content" required></textarea>
+                        <button type="submit">Post</button>
+                    </form>
+                    <ul>
+                        <% posts.forEach(post=> { %>
+                            <li>
+                                <p>
+                                    <%= post.content %> by <%= post.author.username %>
+                                </p>
+                                <ul>
+                                    <% post.comments.forEach(comment=> { %>
+                                        <li>
+                                            <%= comment.content %> by <%= comment.author.username %>
+                                        </li>
+                                        <% }); %>
+                                </ul>
+                                <form action="/posts/comment" method="POST">
+                                    <input type="hidden" name="postId" value="<%= post._id %>">
+                                    <textarea name="content" required></textarea>
+                                    <button type="submit">Comment</button>
+                                </form>
+                            </li>
+                            <% }); %>
+                    </ul>
+
+                    <h2>Add a friend</h2>
+                    <form action="/add-friend" method="POST">
+                        <input type="text" name="friendId" placeholder="Friend ID" required>
+                        <button type="submit">Add</button>
+                    </form>
 </body>
 
 </html>

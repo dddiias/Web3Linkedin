@@ -11,6 +11,7 @@ router.get("/connect_wallet", (req, res) => {
   res.render("connect_wallet", { title: "Web3Linkedin" });
 });
 
+// Обработка подключения кошелька
 router.post("/wallet-connect", async (req, res) => {
   const { walletAddress } = req.body;
   const user = await User.findOne({ walletAddress });
@@ -24,6 +25,7 @@ router.post("/wallet-connect", async (req, res) => {
   }
 });
 
+// Главная страница
 router.get("/main", async (req, res) => {
   if (!req.session.userId) {
     return res.redirect("/");
@@ -42,9 +44,11 @@ router.get("/main", async (req, res) => {
     friendCount: user.connections.length,
     posts,
     friendRequests: user.friendRequests,
+    error: req.query.error, // Добавляем параметр для отображения ошибки
   });
 });
 
+// Страница профиля
 router.get("/profile", async (req, res) => {
   if (!req.session.userId) {
     return res.redirect("/");
@@ -58,6 +62,7 @@ router.get("/profile", async (req, res) => {
   res.render("profile", {
     title: "Profile",
     username: user.username,
+    userId: user._id, // Добавляем отображение идентификатора пользователя
     profilePicture: user.photos.length > 0 ? user.photos[0] : null,
     name: user.username,
     bio: "A short bio about the user",
@@ -68,6 +73,7 @@ router.get("/profile", async (req, res) => {
   });
 });
 
+// Профиль друга
 router.get("/profile/:id", async (req, res) => {
   if (!req.session.userId) {
     return res.redirect("/");
@@ -81,6 +87,7 @@ router.get("/profile/:id", async (req, res) => {
   res.render("profile", {
     title: "Profile",
     username: friend.username,
+    userId: friend._id, // Добавляем отображение идентификатора друга
     profilePicture: friend.photos.length > 0 ? friend.photos[0] : null,
     name: friend.username,
     bio: "A short bio about the user",
@@ -95,6 +102,7 @@ router.get("/register", (req, res) => {
   res.render("register", { title: "Register" });
 });
 
+// Обработка регистрации пользователя
 router.post("/register", async (req, res) => {
   const { username, email, photos } = req.body;
   const walletAddress = req.session.walletAddress;
@@ -123,6 +131,7 @@ router.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
+// Добавление в друзья
 router.post("/add-friend", async (req, res) => {
   if (!req.session.userId) {
     return res.status(401).send("Unauthorized");
@@ -136,14 +145,22 @@ router.post("/add-friend", async (req, res) => {
     return res.status(404).send("User not found");
   }
 
-  if (!user.friendRequests.includes(friendId)) {
-    friend.friendRequests.push(user._id);
-    await friend.save();
+  if (
+    user.connections.includes(friendId) ||
+    friend.friendRequests.includes(req.session.userId)
+  ) {
+    return res.redirect(
+      "/main?error=User%20is%20already%20a%20friend%20or%20request%20already%20sent"
+    );
   }
+
+  friend.friendRequests.push(user._id);
+  await friend.save();
 
   res.redirect("/main");
 });
 
+// Принятие заявки в друзья
 router.post("/accept-friend", async (req, res) => {
   if (!req.session.userId) {
     return res.status(401).send("Unauthorized");
@@ -157,8 +174,13 @@ router.post("/accept-friend", async (req, res) => {
     return res.status(404).send("User not found");
   }
 
-  user.connections.push(requestUser._id);
-  requestUser.connections.push(user._id);
+  if (!user.connections.includes(requestId)) {
+    user.connections.push(requestUser._id);
+  }
+
+  if (!requestUser.connections.includes(user._id)) {
+    requestUser.connections.push(user._id);
+  }
 
   user.friendRequests = user.friendRequests.filter(
     (id) => id.toString() !== requestId
@@ -170,6 +192,7 @@ router.post("/accept-friend", async (req, res) => {
   res.redirect("/main");
 });
 
+// Отклонение заявки в друзья
 router.post("/decline-friend", async (req, res) => {
   if (!req.session.userId) {
     return res.status(401).send("Unauthorized");

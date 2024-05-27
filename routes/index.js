@@ -11,7 +11,6 @@ router.get("/connect_wallet", (req, res) => {
   res.render("connect_wallet", { title: "Web3Linkedin" });
 });
 
-// Обработка подключения кошелька
 router.post("/wallet-connect", async (req, res) => {
   const { walletAddress } = req.body;
   const user = await User.findOne({ walletAddress });
@@ -25,7 +24,6 @@ router.post("/wallet-connect", async (req, res) => {
   }
 });
 
-// Главная страница
 router.get("/main", async (req, res) => {
   if (!req.session.userId) {
     return res.redirect("/");
@@ -37,7 +35,7 @@ router.get("/main", async (req, res) => {
   const posts = await Post.find()
     .populate({
       path: "author",
-      populate: { path: "photos" }, // Убедитесь, что 'photos' - это правильное поле в модели User
+      populate: { path: "photos" }, 
     })
     .populate("comments.author");
 
@@ -48,11 +46,10 @@ router.get("/main", async (req, res) => {
     profilePicture: user.photos.length > 0 ? user.photos[0] : null,
     posts,
     friendRequests: user.friendRequests,
-    error: req.query.error, // Добавляем параметр для отображения ошибки
+    error: req.query.error, 
   });
 });
 
-// Страница профиля
 router.get("/profile", async (req, res) => {
   if (!req.session.userId) {
     return res.redirect("/");
@@ -66,7 +63,7 @@ router.get("/profile", async (req, res) => {
   res.render("profile", {
     title: "Profile",
     username: user.username,
-    userId: user._id, // Добавляем отображение идентификатора пользователя
+    userId: user._id, 
     profilePicture: user.photos.length > 0 ? user.photos[0] : null,
     name: user.username,
     bio: "A short bio about the user",
@@ -77,7 +74,6 @@ router.get("/profile", async (req, res) => {
   });
 });
 
-// Профиль друга
 router.get("/profile/:id", async (req, res) => {
   if (!req.session.userId) {
     return res.redirect("/");
@@ -91,7 +87,7 @@ router.get("/profile/:id", async (req, res) => {
   res.render("profile", {
     title: "Profile",
     username: friend.username,
-    userId: friend._id, // Добавляем отображение идентификатора друга
+    userId: friend._id, 
     profilePicture: friend.photos.length > 0 ? friend.photos[0] : null,
     name: friend.username,
     bio: "A short bio about the user",
@@ -106,7 +102,6 @@ router.get("/register", (req, res) => {
   res.render("register", { title: "Register" });
 });
 
-// Обработка регистрации пользователя
 router.post("/register", async (req, res) => {
   const { username, email, photos } = req.body;
   const walletAddress = req.session.walletAddress;
@@ -135,7 +130,6 @@ router.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
-// Добавление в друзья
 router.post("/add-friend", async (req, res) => {
   if (!req.session.userId) {
     return res.status(401).send("Unauthorized");
@@ -164,7 +158,6 @@ router.post("/add-friend", async (req, res) => {
   res.redirect("/main");
 });
 
-// Принятие заявки в друзья
 router.post("/accept-friend", async (req, res) => {
   if (!req.session.userId) {
     return res.status(401).send("Unauthorized");
@@ -196,7 +189,6 @@ router.post("/accept-friend", async (req, res) => {
   res.redirect("/main");
 });
 
-// Отклонение заявки в друзья
 router.post("/decline-friend", async (req, res) => {
   if (!req.session.userId) {
     return res.status(401).send("Unauthorized");

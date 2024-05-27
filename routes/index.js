@@ -35,13 +35,17 @@ router.get("/main", async (req, res) => {
     .populate("connections")
     .populate("friendRequests");
   const posts = await Post.find()
-    .populate("author")
+    .populate({
+      path: "author",
+      populate: { path: "photos" }, // Убедитесь, что 'photos' - это правильное поле в модели User
+    })
     .populate("comments.author");
 
   res.render("main", {
     title: "Main Page",
     username: user.username,
     friendCount: user.connections.length,
+    profilePicture: user.photos.length > 0 ? user.photos[0] : null,
     posts,
     friendRequests: user.friendRequests,
     error: req.query.error, // Добавляем параметр для отображения ошибки

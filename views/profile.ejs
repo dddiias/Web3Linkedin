@@ -4,60 +4,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        <%= title %>
+    <title>Profile - <%= username %>
     </title>
-    <!-- <link rel="stylesheet" href="/css/styles.css"> -->
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
-    <h1>Profile of <%= username %>
-    </h1>
-    <p><a href="/main">Back to Main</a> | <a href="/logout">Logout</a></p>
-    <% if (profilePicture) { %>
-        <img src="<%= profilePicture %>" alt="Profile Picture">
-        <% } %>
-            <p>Name: <%= name %>
+    <header>
+        <div class="left-header">Welcome, <%= username %>
+        </div>
+        <div class="right-header">
+            <a href="/main">Main</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </header>
+    <main>
+        <div class="profile-info container">
+            <img src="<%= profilePicture ? profilePicture : 'src/avatar.jpg' %>" alt="Profile Picture"
+                class="profile_avatar">
+            <h2>
+                <%= username %>
+            </h2>
+            <p>ID: <%= userId %>
+            </p>
+            <p>Wallet Address: <%= address %>
             </p>
             <p>Bio: <%= bio %>
             </p>
-            <p>Address: <%= address %>
+            <p>Friends: <%= friendCount %>
             </p>
-            <p>ID: <%= userId %>
-            </p> <!-- Добавление отображения идентификатора пользователя -->
-            <p>Number of Friends: <%= friendCount %>
-            </p>
-
-            <h2>Friends</h2>
+            <h3>Your Friends</h3>
             <ul>
                 <% connections.forEach(friend=> { %>
                     <li>
-                        <%= friend.username %> - <a href="/profile/<%= friend._id %>">View Profile</a>
+                        <a href="/profile/<%= friend._id %>">
+                            <%= friend.username %>
+                        </a>
                     </li>
                     <% }); %>
             </ul>
-
-            <h2>Posts</h2>
-            <% if (posts.length> 0) { %>
-                <ul>
-                    <% posts.forEach(post=> { %>
-                        <li>
-                            <p>
-                                <%= post.content %>
-                            </p>
-                            <ul>
-                                <% post.comments.forEach(comment=> { %>
-                                    <li>
-                                        <%= comment.content %> by <%= comment.author.username %>
-                                    </li>
-                                    <% }); %>
-                            </ul>
-                        </li>
-                        <% }); %>
-                </ul>
-                <% } else { %>
-                    <p>No posts yet</p>
-                    <% } %>
+            <h2>Your Posts</h2>
+            <ul>
+                <% posts.forEach(post=> { %>
+                    <li class="post">
+                        <p class="post-content">
+                            <%= post.content %>
+                        </p>
+                        <div class="comments">
+                            <% post.comments.forEach(comment=> { %>
+                                <div class="comment">
+                                    <span class="comment-author">
+                                        <%= comment.author.username %>:
+                                    </span>
+                                    <span class="comment-content">
+                                        <%= comment.content %>
+                                    </span>
+                                </div>
+                                <% }); %>
+                        </div>
+                    </li>
+                    <% }); %>
+            </ul>
+        </div>
+    </main>
 </body>
 
 </html>

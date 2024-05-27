@@ -9,13 +9,15 @@
 </head>
 
 <body>
-    <h1>Connect Wallet</h1>
-    <button id="connectWallet">Connect Wallet</button>
-
-    <video id="video-background" autoplay loop muted>
-        <source src="src/matrix_code.mp4" type="video/mp4">
-    </video>
-
+    <header>
+        <div class="left-header">Web3Linkedin</div>
+    </header>
+    <main>
+        <div class="container">
+            <h1>Connect Wallet</h1>
+            <button id="connectWallet">Connect Wallet</button>
+        </div>
+    </main>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
     <script>
         document.getElementById('connectWallet').addEventListener('click', async () => {

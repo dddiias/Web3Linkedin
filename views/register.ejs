@@ -4,22 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        <%= title %>
-    </title>
+    <title>Register</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
-    <h1>Register</h1>
-    <form action="/register" method="POST">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-        <label for="photos">Photos (optional):</label>
-        <input type="text" id="photos" name="photos">
-        <button type="submit">Register</button>
-    </form>
+    <header>
+        <div class="left-header">Web3Linkedin</div>
+    </header>
+    <main>
+        <div class="container">
+            <h1>Register</h1>
+            <form action="/register" method="POST">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+                <label for="photos">Profile Picture URL</label>
+                <input type="text" id="photos" name="photos">
+                <button type="submit">Register</button>
+            </form>
+        </div>
+    </main>
 </body>
 
 </html>
